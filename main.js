@@ -1,6 +1,7 @@
 var app = new Vue({
-	el: "#root",
+	el: "#app",
 	data: {
-  	email: ''
+	  product: 'Adidas',
+	  image: "./logo.png"
   }
 })
