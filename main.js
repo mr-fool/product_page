@@ -3,7 +3,7 @@ var app = new Vue({
 	data: {
 	  product: 'Adidas',
 	  image: "./assets/black.jpg",
-	  inventory: 11,
+	  inStock: false,
 	  details: ["US size 8", "gopnik style", "male"],
 	  variants: [
 		{
