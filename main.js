@@ -1,8 +1,9 @@
 var app = new Vue({
 	el: "#app",
 	data: {
-	  product: 'Adidas',
-	  image: "./assets/black.jpg",
+	  product: 'Shoes',
+	  brand: "Adidas",
+	  selectedVariant: 0,
 	  inStock: false,
 	  details: ["US size 8", "gopnik style", "male"],
 	  variants: [
@@ -25,8 +26,17 @@ var app = new Vue({
 		addToCart: function () {
 			this.cart++;
 		},
-		updatePrduct: function (variantImage) {
-			this.image = variantImage;
+		updatePrduct: function (index) {
+			this.selectedVariant = index;
+			console.log(index);
+		}
+	},
+	computed: {
+		title() {
+			return this.brand + " " + this.product;
+		},
+		image() {
+			return this.variants[this.selectedVariant].variantImage;
 		}
 	}
 })
