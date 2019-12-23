@@ -4,19 +4,20 @@ var app = new Vue({
 	  product: 'Shoes',
 	  brand: "Adidas",
 	  selectedVariant: 0,
-	  inStock: false,
 	  details: ["US size 8", "gopnik style", "male"],
 	  variants: [
 		{
 	
 			variantId: 2234,
 			variantColor: "white",
-			variantImage: "./assets/white.jpg"
+			variantImage: "./assets/white.jpg",
+			variantQuantity: 10
 		},
 		{
 			variantId: 2235,
 			variantColor: "black",
-			variantImage: "./assets/black.jpg"	
+			variantImage: "./assets/black.jpg",
+			variantQuantity: 0
 		}
 	
 		],
@@ -37,6 +38,9 @@ var app = new Vue({
 		},
 		image() {
 			return this.variants[this.selectedVariant].variantImage;
+		},
+		inStock() {
+			return this.variants[this.selectedVariant].variantQuantity;
 		}
 	}
 })
