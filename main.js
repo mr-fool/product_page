@@ -1,41 +1,40 @@
 Vue.component('product', {
+	props: {
+	  premium: {
+		type: Boolean,
+		required: true
+	  }
+	},
 	template: `
 	<div id="product">
-		<div class="product-image">
-			<img v-bind:src="image">
+	
+	  <div class="product-image">
+	  <img :src="image" />      
+	  </div>
+	  
+	  <div class="product-info">
+		<div class="cart">
+		  <p>Cart({{ cart }})</p>
 		</div>
-
-	<div class="product-info">
-		<h1>{{title}}</h1>
+	  
+		<h1>{{ title }}</h1>
+		<p>Shipping: {{ shipping }}</p>
+		
 		<p v-if="inStock">In Stock</p>
 		<p v-else>Out of Stock</p>
-
+		
+		<h2>Details</h2>
 		<ul>
-			<li v-for="detail in details">{{detail}}</li>
+		  <li v-for="detail in details">{{ detail }}</li>
 		</ul>
-
-		<div v-for="(variant, index) in variants" 
-			:key="variant.variantId"
-			class="color-box"
-			:style="{backgroundColor: variant.variantColor}"
-			@mouseover="updatePrduct(index)"
-			>
-			
-	</div>
-
-	<button v-on:click="addToCart" 
-		:disabled="!inStock"
-		:class="{disabledButton: !inStock}"
-		>
-		Add to Cart</button>
-
-	<div class="cart">
-		<p>Cart({{ cart }})</p>
-	</div>
-
+		<h3>Colors:</h3>
+		<div v-for="variant in variants" :key="variant.variantId">
+		  <div class="color-box" :style="{ backgroundColor: variant.variantColor }" @mouseover="updateProduct(index)"></div>
+		</div>
+		<button :class="{ disabledButton: !inStock }" v-on:click="addToCart" :disabled="!inStock">Add to Cart</button>
+	  </div>
 	</div>
 	`,
-
 	data() {
 		return {
 		product: 'Shoes',
@@ -61,34 +60,41 @@ Vue.component('product', {
 		  cart: 0 
 	  }
 	},
-		
-	  methods: {
-		  addToCart: function () {
-			  this.cart++;
-		  },
-		  updatePrduct: function (index) {
-			  this.selectedVariant = index;
-			  console.log(index);
-		  }
+	methods: {
+	  addToCart() {
+		this.cart += 1
 	  },
-	  computed: {
-		  title() {
-			  return this.brand + " " + this.product;
-		  },
-		  image() {
-			  return this.variants[this.selectedVariant].variantImage;
-		  },
-		  inStock() {
-			  return this.variants[this.selectedVariant].variantQuantity;
-		  }
+	  updateProduct(index) {
+		this.selectedVariant = index
 	  }
-})
-
-
-var app = new Vue({
-	el: "#app",
-	data: {
-		premium: true
+	},
+	computed: {
+	  title() {
+		return this.brand + ' ' + this.product
+	  },
+	  image() {
+		return this.variants[this.selectedVariant].variantImage
+	  },
+	  inStock() {
+		if (this.quantity > 0) {
+		  return true
+		} else {
+		  return false
+		}
+	  },
+	  shipping() {
+		if (this.premium) {
+		  return "Free"
+		} else {
+		  return 2.99
+		}
+	  }
 	}
-	
-})
+  })
+  
+  var app = new Vue({
+	el: '#app',
+	data: {
+	  premium: true
+	}
+  })
