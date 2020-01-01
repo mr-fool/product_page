@@ -36,8 +36,10 @@ Vue.component('product', {
 			  >
 			Add to cart
 			</button>
-  
-		 </div> 
+			
+			<product-tabs></product-tabs>
+		 
+			</div> 
 		 
 		 <product-review @review-submitted="addReview"></product-review>
 	  
@@ -165,8 +167,23 @@ Vue.component('product', {
         }
       })
 	  
-	  Vue.component({
-		  
+	  Vue.component('product-tabs',{
+		template: `
+			<div>
+				<span class='tab'
+					:class="{ activeTab: selectedTab === tab}"
+					v-for="(tab,index) in tabs" 
+					:key="index"
+					@click="selectedTab = tab">
+					{{tab}}</span>
+			</div>
+		`,
+		data() {
+			return {
+				tabs: ['Reviews', 'Make a Review'],
+				selectedTab: 'Reviews'
+			}
+		}
 	  })
 
       var app = new Vue({
