@@ -1,3 +1,6 @@
+var eventBus = new Vue();
+
+
 Vue.component('product', {
 	props: {
 	  premium: {
@@ -37,11 +40,11 @@ Vue.component('product', {
 			Add to cart
 			</button>
 			
-			<product-tabs></product-tabs>
 		 
 			</div> 
-		 
-		 <product-review @review-submitted="addReview"></product-review>
+			<product-tabs :reviews="reviews"></product-tabs>
+
+			
 	  
 	  </div>
 	 `,
@@ -76,9 +79,6 @@ Vue.component('product', {
 		},
 		updateProduct(index) {  
 			this.selectedVariant = index
-		},
-		addReview(productReview) {
-		  this.reviews.push(productReview)
 		}
 	  },
 	  computed: {
@@ -97,6 +97,11 @@ Vue.component('product', {
 			}
 			  return 2.99
 		  }
+	  },
+	  mounted() {
+		  eventBus.$on('review-submitted', productReview => {
+			  this.reviews.push(productReview)
+		  })
 	  }
   })
 
@@ -154,7 +159,7 @@ Vue.component('product', {
                 review: this.review,
                 rating: this.rating
               }
-              this.$emit('review-submitted', productReview)
+              eventBus.$emit('review-submitted', productReview)
               this.name = null
               this.review = null
               this.rating = null
@@ -168,6 +173,12 @@ Vue.component('product', {
       })
 	  
 	  Vue.component('product-tabs',{
+		props: {
+			reviews: {
+				type: Array,
+				required: true
+			}
+		},
 		template: `
 			<div>
 				<span class='tab'
@@ -176,7 +187,22 @@ Vue.component('product', {
 					:key="index"
 					@click="selectedTab = tab">
 					{{tab}}</span>
+					<div v-show="selectedTab === 'Reviews' ">
+					<p v-if="!reviews.length"> There are no reviews yet. </p>
+					<ul v-else> 
+						<li v-for="(review, index) in reviews"
+						:key="index">
+						<p>{{review.name}}</p>
+						<p>Rating: {{review.rating}}</p>
+						<p>{{review.review}}</p>
+						</li>
+					</ul>
+				</div>
+				 
+				<product-review v-show="selectedTab === 'Make a Review' " ></product-review>
 			</div>
+
+
 		`,
 		data() {
 			return {
